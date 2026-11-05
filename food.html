@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Recipe</title>
+    <style>
+        *{
+            padding: 0px;
+            margin: 0px;
+            box-sizing: border-box;
+        }
+        .container{
+            display: flex;
+            justify-content: center;
+            padding: 2rem 3rem;
+            gap: 2rem;
+            /* display: grid;
+            grid-template-columns: repeat(6 , 1fr); */
+        }
+        body{
+            background-color: black;
+            
+        }
+        button{
+            padding: 0.4rem 1rem;
+            background-color: transparent;
+            border-radius: 6px;
+        }
+        .blue{
+            border: 1px solid blue;
+            color: blue;
+            font-weight: bold;
+        }
+        .yellow{
+            border: 1px solid yellow;
+            color:yellow;
+            font-weight: bold;
+        }
+        .white{
+            border: 1px solid white;
+            color:white;
+            font-weight: bold;
+        }
+        .cyan{
+            border: 1px solid cyan;
+            color:cyan;
+            font-weight: bold;
+        }
+        .container input{
+            width:20rem;
+            background-color: rgba(70,44,44);
+            border: none;
+            color: white;
+            padding: 4px;
+            border-radius: 10px;
+        }
+        .container input:focus{
+            outline: none;
+        }
+        .food{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap:2rem;
+            margin:2rem;
+        }
+        .food img{
+            width: 220px;
+            border-radius: 10px;
+            border: 2px solid blue;
+            box-shadow: 1px 3px 5px white;
+        }
+        .food h1{
+            text-align: center;
+            font-size: 1rem;
+            color: white;
+            margin-top: 1rem;
+        }
+        .food button{
+            width: 100%;
+            color: white;
+            background-color: transparent;
+            box-shadow: 1px 4px 6px white;
+            border: none;
+            margin-top: 1rem;
+            
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button id="indian" class="blue">Indian</button>
+        <button   id="canadian" class="yellow">Canadian</button>
+        <button id="american"  class="white">American</button>
+        <button id="thai" class="cyan">Thai</button>
+        <button id="british" class="yellow">British</button>
+        <button id="russian" class="cyan">Russian</button>
+        
+    </div>
+    <div class="container">
+        <input type="text" placeholder="Search" id="search">
+    </div>
+
+
+    <div class="food">
+       
+    </div>
+
+
+
+
+
+    <script>
+        let food = document.querySelector('.food')
+        let indian = document.querySelector('#indian')
+        let american = document.querySelector('#american')
+        let canadian = document.querySelector('#canadian')
+        let thai = document.querySelector('#thai')
+        let british = document.querySelector('#british')
+        let russian = document.querySelector('#russian')
+        let recipe
+        const fetchData = async (area) =>{
+            const api = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?a=${area}`)
+            const data = await api.json()
+            recipe =  data.meals
+            showData(recipe)
+                     
+
+        } 
+        const searchRecipe =()=>{
+            let input = document.querySelector('#search')
+            input.addEventListener('keydown'  , async (e) =>{
+                if(e.key === "Enter"){
+                    let inputValue = input.value
+
+                    const api = await   fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${inputValue}`)
+                     const data =   await api.json()
+                     recipe =  data.meals
+                     showData(recipe)
+                }
+                
+                
+            })
+        }
+        searchRecipe()
+
+
+
+        fetchData('india')
+
+        let showData = (recipe) =>{
+                          food.innerHTML = recipe.map((meal)=>`
+
+             <div style=text-align:center>
+        <div>
+            <img src="${meal.strMealThumb}">
+            </div>
+            <h1>${meal.strMeal}</h1>
+            <button>Add To Cart </button>
+
+       </div>
+             
+
+             `
+                
+                
+             ).join("")  
+        }
+
+         indian.addEventListener('click' , ()=>{
+            fetchData('india')
+            
+        })
+        american.addEventListener('click' , ()=>{
+            fetchData('American')
+            
+        })
+         canadian.addEventListener('click' , ()=>{
+            fetchData('canadian')
+            
+        })
+
+         thai.addEventListener('click' , ()=>{
+            fetchData('thai')
+            
+        })
+        russian.addEventListener('click' , ()=>{
+            fetchData('russian')
+            
+        })
+         british.addEventListener('click' , ()=>{
+            fetchData('british')
+            
+        })
+        
+        
+                
+    </script>
+</body>
+</html>
